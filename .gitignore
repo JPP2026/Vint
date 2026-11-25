@@ -13,13 +13,10 @@ target/
 .DS_Store
 Thumbs.db
 
-# Pendant le dev chacun garde SA base locale (sinon conflit à chaque commit).
-# On l'ajoutera à la toute fin avec : git add -f data/vintdb.mv.db
 data/vintdb.mv.db
-# Par contre on ignore les fichiers temporaires de H2
+# On ignore les fichiers temporaires de H2
 data/*.trace.db
 data/*.lock.db
 
-# Les photos uploadées en local ne vont pas dans git (sauf le .gitkeep)
 uploads/*
 !uploads/.gitkeep

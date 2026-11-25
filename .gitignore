@@ -1,0 +1,22 @@
+target/
+!.mvn/wrapper/maven-wrapper.jar
+
+### IntelliJ / Eclipse / VS Code ###
+.idea/
+*.iml
+.classpath
+.project
+.settings/
+.vscode/
+
+### OS ###
+.DS_Store
+Thumbs.db
+
+data/vintdb.mv.db
+# On ignore les fichiers temporaires de H2
+data/*.trace.db
+data/*.lock.db
+
+uploads/*
+!uploads/.gitkeep

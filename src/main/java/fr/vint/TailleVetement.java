@@ -1,7 +1,7 @@
 package fr.vint.model;
 
 /**
- * Emulateur pour les tailles possibles d'un vêtement
+ * Enumerateur pour les tailles possibles d'un vêtement
  */
 public enum TailleVetement {
     XS,

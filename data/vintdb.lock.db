@@ -1,0 +1,6 @@
+#FileLock
+#Wed Nov 25 14:33:28 CET 2026
+hostName=student-laptop
+id=1a212e94a91ef34f5bc02246f9f09d4fa47fa77efc0
+method=file
+server=127.0.1.1\:37489

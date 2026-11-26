@@ -5,23 +5,16 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 /**
  * Point d'entrée de l'application Vint.
- * <p>
- * L'annotation {@code @SpringBootApplication} active l'auto-configuration de Spring Boot
- * et le scan des composants (controllers, services, repositories...) dans le package
- * {@code fr.vint} et ses sous-packages.
- * </p>
- *
- * @author Justine, Pascal, Pacôme
  */
 @SpringBootApplication
 public class VintApplication {
 
     /**
-     * Lance le serveur Tomcat embarqué et démarre l'appli.
+     * Le main permet de lancer le serveur Tomcat embarqué et démarre l'appli
      *
-     * @param args arguments de la ligne de commande (pas utilisés)
+     * @param args arguments de la ligne de commande 
      */
     public static void main(String[] args) {
-        SpringApplication.run(VintApplication.class, args);
+        SpringApplication.run(VintApplication.class, args); // Lance l'appli
     }
 }

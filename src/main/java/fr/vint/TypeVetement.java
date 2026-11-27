@@ -1,7 +1,11 @@
 package fr.vint.model;
 
 /**
+<<<<<<< HEAD
  * Enumerateur qui permet d'avoir les differents types de vétement
+=======
+ * Enumérateur qui permet d'avoir les differents types de vétement
+>>>>>>> origin/main
  */
 public enum TypeVetement {
     PULL("Pull"),

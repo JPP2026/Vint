@@ -1,7 +1,11 @@
 package fr.vint.model;
 
 /**
+<<<<<<< HEAD
  * Enumerateur pour les tailles possibles d'un vêtement
+=======
+ * Enumérateur pour les tailles possibles d'un vêtement
+>>>>>>> origin/main
  */
 public enum TailleVetement {
     XS,
@@ -13,7 +17,7 @@ public enum TailleVetement {
     UNIQUE;
 
     /**
-     * Fontion qui permet d'affiche le nom de la taille, sauf pour UNIQUE
+     * Fontion qui permet d'afficher le nom de la taille, sauf pour UNIQUE
      * @return le libellé de la taille
      */
     public String getLibelle() {

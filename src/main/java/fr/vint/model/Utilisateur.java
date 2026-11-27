@@ -3,6 +3,10 @@ package fr.vint.model;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Entité qui représente un utilisateur de Vint
@@ -45,6 +49,35 @@ public class Utilisateur {
     private Profil profil;
 
     /**
+     * Panier de l'utilisateur 
+     */
+    @OneToOne(mappedBy = "proprietaire", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Panier panier;
+
+    /**
+     * One-to-Many : annonces publiées par l'utilisateur
+     * mappedBy = "vendeur" : la clé étrangère est dans Annonce
+     */
+    @OneToMany(mappedBy = "vendeur")
+    @OrderBy("datePublication DESC")
+    private List<Annonce> annonces = new ArrayList<>();
+
+    /**
+     * Many-to-Many : annonces mises en favori
+     * Set pour éviter les doublons
+     */
+    @ManyToMany
+    @JoinTable(name = "favoris", joinColumns = @JoinColumn(name = "utilisateur_id"), inverseJoinColumns = @JoinColumn(name = "annonce_id"))
+    private Set<Annonce> favoris = new HashSet<>();
+
+    /**
+     * One-to-Many : commandes passées en tant qu'acheteur
+     */
+    @OneToMany(mappedBy = "acheteur")
+    @OrderBy("dateCommande DESC")
+    private List<Commande> commandes = new ArrayList<>();
+
+    /**
      * Constructeur vide pour JPA
      */
     public Utilisateur() {
@@ -53,8 +86,8 @@ public class Utilisateur {
     /**
      * Constructeur pour créer un utilisateur à l'inscription
      *
-     * @param nom        pseudo
-     * @param email      email 
+     * @param nom pseudo
+     * @param email email 
      * @param motDePasse mot de passe hashé
      */
     public Utilisateur(String nom, String email, String motDePasse) {
@@ -72,6 +105,34 @@ public class Utilisateur {
      */
     public boolean estEnVacances() {
         return profil != null && profil.isModeVacances();
+    }
+
+    /**
+     * Fct qui permet d'ajouter une annonce aux favoris
+     * Set donc pas de doublon
+     * @param annonce l'annonce à ajouter
+     */
+    public void ajouterFavori(Annonce annonce) {
+        favoris.add(annonce);
+        annonce.getFans().add(this); // met à jour l'autre côté de la relation
+    }
+
+    /**
+     * Fct qui permet de retirer une annonce des favoris
+     * @param annonce l'annonce à retirer
+     */
+    public void retirerFavori(Annonce annonce) {
+        favoris.remove(annonce);
+        annonce.getFans().remove(this);
+    }
+
+    /**
+     * Fct qui permet de savoir si l'annonce est dans les favoris
+     * @param annonce l'annonce à tester
+     * @return true si elle est en favori
+     */
+    public boolean aEnFavori(Annonce annonce) {
+        return favoris.contains(annonce);
     }
 
     // ---------- Getters / Setters ---------------
@@ -161,5 +222,45 @@ public class Utilisateur {
         if (profil != null) {
             profil.setUtilisateur(this);
         }
+    }
+
+    /** @return panier */
+    public Panier getPanier() {
+        return panier;
+    }
+
+    /** @param panier panier */
+    public void setPanier(Panier panier) {
+        this.panier = panier;
+    }
+
+    /** @return annonces publiées */
+    public List<Annonce> getAnnonces() {
+        return annonces;
+    }
+
+    /** @param annonces annonces publiées */
+    public void setAnnonces(List<Annonce> annonces) {
+        this.annonces = annonces;
+    }
+
+    /** @return favoris */
+    public Set<Annonce> getFavoris() {
+        return favoris;
+    }
+
+    /** @param favoris favoris */
+    public void setFavoris(Set<Annonce> favoris) {
+        this.favoris = favoris;
+    }
+
+    /** @return commandes en tant qu'acheteur */
+    public List<Commande> getCommandes() {
+        return commandes;
+    }
+
+    /** @param commandes commandes */
+    public void setCommandes(List<Commande> commandes) {
+        this.commandes = commandes;
     }
 }

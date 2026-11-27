@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Entité qui représente une annonce de vente publiée par un utilisatreur
@@ -69,6 +71,25 @@ public class Annonce {
     @ManyToOne(optional = false)
     @JoinColumn(name = "vendeur_id")
     private Utilisateur vendeur;
+
+    /**
+     * Commande qui a acheté l'annonce (null tant qu'elle n'est pas vendue)
+     */
+    @ManyToOne
+    @JoinColumn(name = "commande_id")
+    private Commande commande;
+
+    /**
+     * Côté inverse du Many-to-Many des favoris
+     */
+    @ManyToMany(mappedBy = "favoris")
+    private Set<Utilisateur> fans = new HashSet<>();
+
+    /**
+     * Côté inverse du Many-to-Many panier/annonces
+     */
+    @ManyToMany(mappedBy = "annonces")
+    private Set<Panier> paniers = new HashSet<>();
 
     /**
      * Constructeur vide obligatoire pour JPA
@@ -264,5 +285,53 @@ public class Annonce {
      */
     public void setVendeur(Utilisateur vendeur) {
         this.vendeur = vendeur;
+    }
+
+    /**
+     * Fct qui permet de renvoyer la commande
+     * @return la commande (null si pas vendue)
+     */
+    public Commande getCommande() {
+        return commande;
+    }
+
+    /**
+     * Fct qui permet de modifier la commande
+     * @param commande la commande
+     */
+    public void setCommande(Commande commande) {
+        this.commande = commande;
+    }
+
+    /**
+     * Fct qui permet de renvoyer les utilisateurs qui ont l'annonce en favori
+     * @return les fans
+     */
+    public Set<Utilisateur> getFans() {
+        return fans;
+    }
+
+    /**
+     * Fct qui permet de modifier les fans
+     * @param fans les utilisateurs qui ont l'annonce en favori
+     */
+    public void setFans(Set<Utilisateur> fans) {
+        this.fans = fans;
+    }
+
+    /**
+     * Fct qui permet de renvoyer les paniers qui contiennent l'annonce
+     * @return les paniers
+     */
+    public Set<Panier> getPaniers() {
+        return paniers;
+    }
+
+    /**
+     * Fct qui permet de modifier les paniers
+     * @param paniers les paniers qui contiennent l'annonce
+     */
+    public void setPaniers(Set<Panier> paniers) {
+        this.paniers = paniers;
     }
 }

@@ -3,6 +3,8 @@ package fr.vint.model;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Entité qui représente un utilisateur de Vint
@@ -43,6 +45,20 @@ public class Utilisateur {
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)//modifications sont directement modifier dans profil
     @JoinColumn(name = "profil_id")
     private Profil profil;
+
+    /**
+     * Le panier de l'utilisateur
+     */
+    @OneToOne(mappedBy = "proprietaire", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Panier panier;
+
+    /**
+     * One-to-Many : toutes les annonces publiées par cet utilisateur
+     */
+    @OneToMany(mappedBy = "vendeur") // la clé étrangère est dans Annonce (attribut vendeur)
+    @OrderBy("datePublication DESC")
+    private List<Annonce> annonces = new ArrayList<>();
+
 
     /**
      * Constructeur vide pour JPA
@@ -161,5 +177,25 @@ public class Utilisateur {
         if (profil != null) {
             profil.setUtilisateur(this);
         }
+    }
+
+    /** @return le panier */
+    public Panier getPanier() {
+        return panier;
+    }
+
+    /** @param panier le panier */
+    public void setPanier(Panier panier) {
+        this.panier = panier;
+    }
+
+    /** @return les annonces publiées */
+    public List<Annonce> getAnnonces() {
+        return annonces;
+    }
+
+    /** @param annonces les annonces publiées */
+    public void setAnnonces(List<Annonce> annonces) {
+        this.annonces = annonces;
     }
 }

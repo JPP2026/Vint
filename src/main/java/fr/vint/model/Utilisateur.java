@@ -73,8 +73,8 @@ public class Utilisateur {
     /**
      * Constructeur pour créer un utilisateur à l'inscription
      *
-     * @param nom        pseudo
-     * @param email      email 
+     * @param nom pseudo
+     * @param email email 
      * @param motDePasse mot de passe hashé
      */
     public Utilisateur(String nom, String email, String motDePasse) {
@@ -92,6 +92,34 @@ public class Utilisateur {
      */
     public boolean estEnVacances() {
         return profil != null && profil.isModeVacances();
+    }
+
+    /**
+     * Fct qui permet d'ajouter une annonce aux favoris
+     * Set donc pas de doublon
+     * @param annonce l'annonce à ajouter
+     */
+    public void ajouterFavori(Annonce annonce) {
+        favoris.add(annonce);
+        annonce.getFans().add(this); // met à jour l'autre côté de la relation
+    }
+
+    /**
+     * Fct qui permet de retirer une annonce des favoris
+     * @param annonce l'annonce à retirer
+     */
+    public void retirerFavori(Annonce annonce) {
+        favoris.remove(annonce);
+        annonce.getFans().remove(this);
+    }
+
+    /**
+     * Fct qui permet de savoir si l'annonce est dans les favoris
+     * @param annonce l'annonce à tester
+     * @return true si elle est en favori
+     */
+    public boolean aEnFavori(Annonce annonce) {
+        return favoris.contains(annonce);
     }
 
     // ---------- Getters / Setters ---------------

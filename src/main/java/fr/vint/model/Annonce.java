@@ -1,7 +1,6 @@
 package fr.vint.model;
 
 import jakarta.persistence.*;
-
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -57,6 +56,13 @@ public class Annonce {
     @ManyToOne(optional = false)
     @JoinColumn(name = "vendeur_id")
     private Utilisateur vendeur;
+
+    /**
+     * La commande qui a acheté cette annonce (null si pas vendue)
+     */
+    @ManyToOne
+    @JoinColumn(name = "commande_id")
+    private Commande commande;
 
     /** Côté inverse du Many-to-Many panier/annonces */
     @ManyToMany(mappedBy = "annonces")
@@ -206,6 +212,16 @@ public class Annonce {
     /** @param vendeur le vendeur */
     public void setVendeur(Utilisateur vendeur) {
         this.vendeur = vendeur;
+    }
+
+    /** @return la commande (null si pas vendue) */
+    public Commande getCommande() {
+        return commande;
+    }
+
+    /** @param commande la commande */
+    public void setCommande(Commande commande) {
+        this.commande = commande;
     }
 
     /** @return les paniers qui contiennent l'annonce */

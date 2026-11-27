@@ -1,7 +1,6 @@
 package fr.vint.model;
 
 import jakarta.persistence.*;
-
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -58,6 +57,11 @@ public class Utilisateur {
     @OneToMany(mappedBy = "vendeur") // la clé étrangère est dans Annonce (attribut vendeur)
     @OrderBy("datePublication DESC")
     private List<Annonce> annonces = new ArrayList<>();
+
+    /** One-to-Many : les commandes passées en tant qu'acheteur */
+    @OneToMany(mappedBy = "acheteur")
+    @OrderBy("dateCommande DESC")
+    private List<Commande> commandes = new ArrayList<>();
 
 
     /**
@@ -197,5 +201,15 @@ public class Utilisateur {
     /** @param annonces les annonces publiées */
     public void setAnnonces(List<Annonce> annonces) {
         this.annonces = annonces;
+    }
+
+    /** @return les commandes en tant qu'acheteur */
+    public List<Commande> getCommandes() {
+        return commandes;
+    }
+
+    /** @param commandes les commandes */
+    public void setCommandes(List<Commande> commandes) {
+        this.commandes = commandes;
     }
 }

@@ -6,49 +6,55 @@ import java.time.LocalDate;
 
 /**
  * Entité qui représente un utilisateur de Vint
- * 
  */
-@Entity //indique que cette classe est reliée à une table de la BDD
+@Entity //indique que Utilisateur sera lié avec une table de la BDD
 @Table(name = "utilisateurs")
 public class Utilisateur {
 
-    /** Clé primaire auto-incrémentée par la BDD */
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) //génère automatiquement l'incrémentation des id
+    /** Clé primaire */
+    @Id 
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // auto incrémentation des id 
     private Long id;
 
     /** Pseudo affiché sur le site */
-    @Column(nullable = false, length = 50) //champ obligatoire et max 50 car.
+    @Column(nullable = false, length = 50) //champ obligatoire
     private String nom;
 
     /** Email */
-    @Column(nullable = false, unique = true)//unique car c'est aussi l'id de connexion 
+    @Column(nullable = false, unique = true) //unique car email est l'identifiant de connexion
     private String email;
 
-    /** Mot de passe hashé avec BCrypt*/
+    /** Mdp hashé avec BCrypt */
     @Column(nullable = false)
     private String motDePasse;
 
-    /** Adresse de livraison */
+    /** Adresse de livraison (facultatif à l'inscription) */
     private String adresse;
 
-    /** Numéro de téléphone */
+    /** Numéro de téléphone (facultatif) */
     private String telephone;
 
     /** Date d'inscription (remplie automatiquement dès la création) */
     private LocalDate dateInscription = LocalDate.now();
 
     /**
-     * Constructeur Utilisateur vide pour Hibernate
+     * Relation One-to-One avec le profil (possède la colonne profil_id)
+     */
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)//modifications sont directement modifier dans profil
+    @JoinColumn(name = "profil_id")
+    private Profil profil;
+
+    /**
+     * Constructeur vide pour JPA
      */
     public Utilisateur() {
     }
 
     /**
-     * Constructeur Utilisateur pour créer un utilisateur à l'inscription
+     * Constructeur pour créer un utilisateur à l'inscription
      *
      * @param nom        pseudo
-     * @param email      email (identifiant)
+     * @param email      email 
      * @param motDePasse mot de passe hashé
      */
     public Utilisateur(String nom, String email, String motDePasse) {
@@ -57,7 +63,18 @@ public class Utilisateur {
         this.motDePasse = motDePasse;
     }
 
-    // --------------- Getters / Setters ---------------
+    // ----------- Méthodes métier --------------
+
+    /**
+     * Si vendeur est en mode vacances -> n'apparait plus dans la boutique
+     *
+     * @return true si le mode vacances est activé
+     */
+    public boolean estEnVacances() {
+        return profil != null && profil.isModeVacances();
+    }
+
+    // ---------- Getters / Setters ---------------
 
     /** @return identifiant */
     public Long getId() {
@@ -69,12 +86,12 @@ public class Utilisateur {
         this.id = id;
     }
 
-    /** @return  pseudo */
+    /** @return pseudo */
     public String getNom() {
         return nom;
     }
 
-    /** @param nom  pseudo */
+    /** @param nom pseudo */
     public void setNom(String nom) {
         this.nom = nom;
     }
@@ -89,12 +106,12 @@ public class Utilisateur {
         this.email = email;
     }
 
-    /** @return mot de passe hashé */
+    /** @return mdp hashé */
     public String getMotDePasse() {
         return motDePasse;
     }
 
-    /** @param motDePasse mot de passe hashé */
+    /** @param motDePasse mdp hashé */
     public void setMotDePasse(String motDePasse) {
         this.motDePasse = motDePasse;
     }
@@ -127,5 +144,22 @@ public class Utilisateur {
     /** @param dateInscription date d'inscription */
     public void setDateInscription(LocalDate dateInscription) {
         this.dateInscription = dateInscription;
+    }
+
+    /** @return  profil */
+    public Profil getProfil() {
+        return profil;
+    }
+
+    /**
+     * Associe un profil à l'utilisateur et met à jour le lien retour
+     * 
+     * @param profil le profil
+     */
+    public void setProfil(Profil profil) {
+        this.profil = profil;
+        if (profil != null) {
+            profil.setUtilisateur(this);
+        }
     }
 }

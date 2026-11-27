@@ -1,12 +1,9 @@
 package fr.vint.model;
 
 import jakarta.persistence.*;
-
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Entité qui représente un utilisateur de Vint
@@ -49,33 +46,23 @@ public class Utilisateur {
     private Profil profil;
 
     /**
-     * Panier de l'utilisateur 
+     * Le panier de l'utilisateur
      */
     @OneToOne(mappedBy = "proprietaire", cascade = CascadeType.ALL, orphanRemoval = true)
     private Panier panier;
 
     /**
-     * One-to-Many : annonces publiées par l'utilisateur
-     * mappedBy = "vendeur" : la clé étrangère est dans Annonce
+     * One-to-Many : toutes les annonces publiées par cet utilisateur
      */
-    @OneToMany(mappedBy = "vendeur")
+    @OneToMany(mappedBy = "vendeur") // la clé étrangère est dans Annonce (attribut vendeur)
     @OrderBy("datePublication DESC")
     private List<Annonce> annonces = new ArrayList<>();
 
-    /**
-     * Many-to-Many : annonces mises en favori
-     * Set pour éviter les doublons
-     */
-    @ManyToMany
-    @JoinTable(name = "favoris", joinColumns = @JoinColumn(name = "utilisateur_id"), inverseJoinColumns = @JoinColumn(name = "annonce_id"))
-    private Set<Annonce> favoris = new HashSet<>();
-
-    /**
-     * One-to-Many : commandes passées en tant qu'acheteur
-     */
+    /** One-to-Many : les commandes passées en tant qu'acheteur */
     @OneToMany(mappedBy = "acheteur")
     @OrderBy("dateCommande DESC")
     private List<Commande> commandes = new ArrayList<>();
+
 
     /**
      * Constructeur vide pour JPA
@@ -224,42 +211,32 @@ public class Utilisateur {
         }
     }
 
-    /** @return panier */
+    /** @return le panier */
     public Panier getPanier() {
         return panier;
     }
 
-    /** @param panier panier */
+    /** @param panier le panier */
     public void setPanier(Panier panier) {
         this.panier = panier;
     }
 
-    /** @return annonces publiées */
+    /** @return les annonces publiées */
     public List<Annonce> getAnnonces() {
         return annonces;
     }
 
-    /** @param annonces annonces publiées */
+    /** @param annonces les annonces publiées */
     public void setAnnonces(List<Annonce> annonces) {
         this.annonces = annonces;
     }
 
-    /** @return favoris */
-    public Set<Annonce> getFavoris() {
-        return favoris;
-    }
-
-    /** @param favoris favoris */
-    public void setFavoris(Set<Annonce> favoris) {
-        this.favoris = favoris;
-    }
-
-    /** @return commandes en tant qu'acheteur */
+    /** @return les commandes en tant qu'acheteur */
     public List<Commande> getCommandes() {
         return commandes;
     }
 
-    /** @param commandes commandes */
+    /** @param commandes les commandes */
     public void setCommandes(List<Commande> commandes) {
         this.commandes = commandes;
     }

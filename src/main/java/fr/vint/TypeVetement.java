@@ -2,7 +2,11 @@ package fr.vint.model;
 
 /**
 <<<<<<< HEAD
+<<<<<<< HEAD
  * Enumerateur qui permet d'avoir les differents types de vétement
+=======
+ * Enumérateur qui permet d'avoir les differents types de vétement
+>>>>>>> origin/main
 =======
  * Enumérateur qui permet d'avoir les differents types de vétement
 >>>>>>> origin/main
